@@ -1,0 +1,186 @@
+@startuml
+
+class Usuario {
+       - id: Long
+       - nome: String
+       - email: String
+       - senha: String
+       - cpf: String
+       - nomeImage: string
+       - TipoPerfil : TipoPerfil
+    }
+
+    enum TipoPerfil{
+        ADMIN, FUNCIONARIO, CLIENTE
+    }
+
+
+    class Album {
+        - nome : String
+        - anoLancamento: String
+    }
+
+    class Gravadora{
+        - id : Long
+        - nome: String
+    }
+
+    class Artista{
+        - id : Long
+        - nome: String
+        - descricao: String
+    }
+
+    class Genero{
+        - id : Long
+        - nome: String
+    }
+   
+    class CD {
+        - id: Long
+        - nome: String
+        - descricao: String
+        - preco: Double
+        - estoque: Integer
+    }
+
+    class EdicaoLimitada {
+    - nome: string
+    - endereco: Endereço
+}
+
+    class EdicaoEspecial {
+    - descricao: string
+    - conteudoAdicional: string
+    - precoExtra: float
+}
+
+    class Faixa {
+    - numero: int
+    - titulo: string
+    - duracao: string
+    - compositor: string
+    - interprete: string
+}
+
+    class Compositor {
+    - id: Long
+    - nome: string
+    - descricao: string
+}
+ 
+    class ClassificacaoEtaria {
+    - faixaEtaria: string
+    - descricao: string
+}
+
+    class Venda {
+        - id: Long
+        - dataVenda: LocalDate
+        - totalVenda: Double
+        - ifFinalizada: Boolean
+    }
+
+    class ItemVenda{
+        id: Long
+        precoUnitario: Double
+        quantidade: Interger
+
+    }
+
+    class Telefone {
+        - id: Long
+        - codigoArea: String
+        - numero: String
+    }
+
+    class Endereco {
+        - id: Long
+        - logradouro: String
+        - bairro: String
+        - numero: String
+        - complemento: String
+        - cep: String
+    }
+
+    abstract class Pagamento {
+        - id: Long
+        - isPago: Boolean
+        - dataConfirmacaoPagamento: LocalDate
+        - valor: Double
+    }
+   
+    class Boleto {
+        - nome: String
+        - cpf: String
+        - dataDoBoleto: LocalDate
+        - dataVencimento: LocalDateDate
+    }
+
+    class Pix {
+        - nome: String
+        - cpf: String
+        - dataVencimento: LocalDateTime
+    }
+
+    class Cartao {
+        - tipoCartao : TipoCartao
+        - numeroCartao: String
+        - nomeCartao: String
+        - cvv: String
+        - cpf: String
+    }
+
+    enum TipoCartao {
+        DEBITO, CREDITO
+    }
+
+    Venda "1" o--> "1" Endereco
+
+
+    Venda "1" --> "*" ItemVenda
+
+    CD "*" --> "1" Album
+
+    Venda "*" --> "1" Usuario
+
+    ItemVenda "*" --> "1" CD
+
+    Usuario "*" *-- "1" Endereco
+
+    Usuario "1" --> "*" Telefone
+   
+    CD "*" --> "1" Artista
+   
+    Album "*" --> "*" Artista
+
+    Album "*" --> "*" Genero
+
+    Gravadora "1" --> "*" Album
+
+    Venda "1" --> "1" Pagamento
+
+    Cartao "1" --> "1" TipoCartao
+   
+    CD "*" -- "*" Faixa
+
+    EdicaoLimitada "*" --> "*" CD
+
+    CD "*" --> "1" EdicaoEspecial
+
+    Faixa "*" --o "1" ClassificacaoEtaria
+
+    CD "*" --> "1" Gravadora
+
+    Usuario "*" --> "1" TipoPerfil  
+
+    Compositor "*" --> "*" Faixa
+
+    Pagamento <-- Boleto
+    Pagamento <-- Pix
+    Pagamento <-- Cartao
+   
+ 
+   
+
+@enduml
