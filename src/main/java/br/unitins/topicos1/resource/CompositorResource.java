@@ -81,8 +81,8 @@ public class CompositorResource {
     }
 
     @PUT
-    @RolesAllowed({"ADMIN"})
-    @Transactional
+    /* @RolesAllowed({"ADMIN"}) */
+    /* @Transactional */
     @Path("/{id}")
     public Response update(CompositorDTO dto, @PathParam("id") Long id){
         Result result = null;

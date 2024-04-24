@@ -1,5 +1,6 @@
 package br.unitins.topicos1.model;
 
+import br.unitins.topicos1.dto.EnderecoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -26,7 +27,33 @@ public class Endereco extends DefaultEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_municipio", nullable = false)
-    private Municipio idMunicipio;
+    private Municipio municipio;
+
+    @ManyToOne
+
+    private Usuario usuario;
+
+
+    public Endereco() {
+    }
+
+    public static Endereco of(EnderecoDTO dto) {
+        Endereco endereco = new Endereco();
+        endereco.setId(dto.id());
+        endereco.setLogradouro(dto.logradouro());
+        endereco.setNumero(dto.numero());
+        endereco.setComplemento(dto.complemento());
+        endereco.setBairro(dto.bairro());
+        endereco.setCep(dto.cep());
+        endereco.setMunicipio(new Municipio(dto.idMunicipio()));
+        return endereco;
+    }
+
+     
+    public Endereco(Long idEndereco) {
+        this.setId(idEndereco);
+    }
+
 
     public String getLogradouro() {
         return logradouro;
@@ -68,11 +95,11 @@ public class Endereco extends DefaultEntity {
         this.cep = cep;
     }
 
-    public Municipio getIdMunicipio() {
-        return idMunicipio;
+    public Municipio getMunicipio() {
+        return municipio;
     }
 
-    public void setIdMunicipio(Municipio municipio) {
-        this.idMunicipio = municipio;
+    public void setMunicipio(Municipio municipio) {
+        this.municipio = municipio;
     }
 }

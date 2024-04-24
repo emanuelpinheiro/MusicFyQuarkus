@@ -35,7 +35,7 @@ public class EnderecoResource {
     private static final Logger LOG = Logger.getLogger(EnderecoResource.class);
 
     @GET
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findByAll(){
         LOG.info("Listando todos os endereços.");
         return Response.ok(service.findByAll()).build();
@@ -43,7 +43,7 @@ public class EnderecoResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
+   /*  @RolesAllowed({"ADMIN"}) */
     public Response findById(@PathParam("id") Long id){
         LOG.infof("Listando o endereço do id %s", id);
         return Response.ok(service.findById(id)).build();
@@ -51,7 +51,7 @@ public class EnderecoResource {
 
     @GET
     @Path("/cep/{cep}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findByCep(@PathParam("cep") String cep){
         LOG.infof("Listando o endereço do cep %s", cep);
         return Response.ok(service.findByCep(cep)).build();
@@ -59,17 +59,17 @@ public class EnderecoResource {
 
     @POST
     @Path("/insere-endereco")
-    @RolesAllowed({"USER","ADMIN"})
+   /*  @RolesAllowed({"USER","ADMIN"}) */
     public Response insert(EnderecoDTO dto){
         LOG.info("Inserindo endereço.");
         String login = jwt.getSubject();
-        return Response.status(Status.CREATED).entity(service.insert(dto,login)).build();
+        return Response.status(Status.CREATED).entity(service.insert(dto,idusuario)).build();
     }
 
     @PUT
-    @Transactional
+    /* @Transactional */
     @Path("/atualiza-endereco/{id}/{idEndereco}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response update(EnderecoDTO dto, @PathParam("id") Long id,  @PathParam("idEndereco") Long idEndereco){
         LOG.info("Atualizando o endereço.");
         service.update(idEndereco, id, dto);
@@ -79,9 +79,9 @@ public class EnderecoResource {
     }
 
     @DELETE
-    @Transactional
+    /* @Transactional */
     @Path("/deleta-endereco/{id}/{idEndereco}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response delete(@PathParam("id") Long id, @PathParam("idEndereco") Long idEndereco){
         LOG.infof("Deletando endereço %s", idEndereco);
         service.delete(id, idEndereco);

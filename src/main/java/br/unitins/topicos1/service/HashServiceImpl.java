@@ -38,7 +38,7 @@ public static void main(String[] args) {
     HashServiceImpl hash = new HashServiceImpl();
   
     System.out.println(hash.getHashSenha("123"));
-    System.out.println(hash.getHashSenha("456"));
+    System.out.println(hash.getHashSenha("123"));
     
 
     }

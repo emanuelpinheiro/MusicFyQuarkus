@@ -63,7 +63,7 @@ public class ClassificacaoEtariaResource {
     }
 
     @POST
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     @Transactional
     public Response insert(@Valid ClassificacaoEtariaDTO dto){
         LOG.infof("Inserindo uma nova classificação etária: %s", dto.faixaEtaria());
@@ -83,7 +83,7 @@ public class ClassificacaoEtariaResource {
     }
 
     @PUT
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     @Transactional
     @Path("/{id}")
     public Response update(ClassificacaoEtariaDTO dto, @PathParam("id") Long id){
@@ -105,7 +105,7 @@ public class ClassificacaoEtariaResource {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     @Transactional
     public Response delete(@PathParam("id") Long id) throws IllegalArgumentException{
         try{

@@ -9,7 +9,7 @@ public record EnderecoResponseDTO(
         String numero,
         String complemento,
         String cep,
-        Municipio idMunicipio
+        Municipio municipio
 ) {
     public static EnderecoResponseDTO valueOf(Endereco endereco) {
         return new EnderecoResponseDTO(
@@ -18,7 +18,7 @@ public record EnderecoResponseDTO(
                 endereco.getNumero(),
                 endereco.getComplemento(),
                 endereco.getCep(),
-                endereco.getIdMunicipio()
+                endereco.getMunicipio()
         );
     }
 

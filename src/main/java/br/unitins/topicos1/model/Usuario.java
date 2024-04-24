@@ -1,5 +1,6 @@
 package br.unitins.topicos1.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,7 +32,7 @@ public class Usuario extends DefaultEntity {
     @JoinTable(name="usuario_telefone",
         joinColumns= @JoinColumn(name="id_usuario"),
         inverseJoinColumns = @JoinColumn(name="id_telefone") )
-    private List<Telefone> listaTelefone;
+    private List<Telefone> listaTelefone = new ArrayList<Telefone>();
 
     @OneToMany(cascade =  CascadeType.ALL, orphanRemoval = true )
     @JoinTable(name = "usuario_endereco", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_endereco"))
@@ -77,14 +78,6 @@ public class Usuario extends DefaultEntity {
         this.perfil = perfil;
     }
 
-    public List<Endereco> getEndereco() {
-        return listaEndereco;
-    }
-
-    public void setEndereco(List<Endereco> listaEndereco) {
-        this.listaEndereco = listaEndereco;
-    }
-    
     public String getNomeImagem() {
         return nomeImagem;
     }
@@ -99,5 +92,13 @@ public class Usuario extends DefaultEntity {
 
     public void setCpf(String cpf){
         this.cpf = cpf;
+    }
+
+    public List<Endereco> getListaEndereco() {
+        return listaEndereco;
+    }
+
+    public void setListaEndereco(List<Endereco> listaEndereco) {
+        this.listaEndereco = listaEndereco;
     }
 }

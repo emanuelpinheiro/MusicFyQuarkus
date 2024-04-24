@@ -24,7 +24,7 @@ public record UsuarioResponseDTO(
             usuario.getNomeImagem(),
             usuario.getCpf(),
             usuario.getPerfil(),
-            usuario.getEndereco().stream().map(e -> EnderecoResponseDTO.valueOf(e)).toList(),
+            usuario.getListaEndereco().stream().map(e -> EnderecoResponseDTO.valueOf(e)).toList(),
             usuario.getListaTelefone().stream().map(t -> TelefoneResponseDTO.valueOf(t)).toList()
          );
 

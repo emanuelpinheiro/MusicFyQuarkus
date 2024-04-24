@@ -44,20 +44,16 @@ public class AuthResource {
 
         UsuarioResponseDTO result = service.findByLoginAndSenha(dto.login(), hashSenha);
 
-        if (result != null){
-            LOG.info("Login e senha corretos." + dto.login());
-            
-            LOG.info("Finalizando o processo de login.");
-            return Response.ok().header("Authorization", jwtService.generateJwt(result)).build();
-        }
-
-        else{
+        if (result != null)
+            LOG.info("Login e senha corretos.");
+        else
             LOG.info("Login e senha incorretos.");
-            return Response.status(Response.Status.UNAUTHORIZED).build();
         
-        }
-    
+        String token = jwtService.generateJwt(result);
 
+        LOG.info("Finalizando o processo de login.");
+
+        return Response.ok().header("Authorization", token).build();
     }
-}  
-
+  
+}

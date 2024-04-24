@@ -30,7 +30,7 @@ public class EdicaoEspecialResource {
     private static final Logger LOG = Logger.getLogger(EdicaoEspecialResource.class);
 
     @GET
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findByAll(){
         LOG.info("Listando todas as edições especiais.");
         return Response.ok(service.findByAll()).build();
@@ -38,7 +38,7 @@ public class EdicaoEspecialResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findById(@PathParam("id") Long id){
         LOG.infof("Listando a edição especial do id %s", id);
         return Response.ok(service.findById(id)).build();
@@ -46,7 +46,7 @@ public class EdicaoEspecialResource {
 
     @GET
     @Path("/descricao/{descricao}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findByDescricao(@PathParam("descricao") String descricao){
         LOG.infof("Listando a edição especial da descrição %s", descricao);
         return Response.ok(service.findByDescricao(descricao)).build();
@@ -54,7 +54,7 @@ public class EdicaoEspecialResource {
 
     @GET
     @Path("/conteudoadicional/{conteudoadicional}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findByConteudoAdicional(@PathParam("conteudoadicional") String conteudoAdicional){
         LOG.infof("Listando a edição especial do conteúdo adicional %s", conteudoAdicional);
         return Response.ok(service.findByConteudoAdicional(conteudoAdicional)).build();
@@ -62,15 +62,15 @@ public class EdicaoEspecialResource {
 
     @GET
     @Path("/precoextra/{precoextra}")
-    @RolesAllowed({"ADMIN"})
+    /* @RolesAllowed({"ADMIN"}) */
     public Response findByPrecoExtra(@PathParam("precoextra") Float precoExtra){
         LOG.infof("Listando a edição especial do preço extra %s", precoExtra);
         return Response.ok(service.findByPrecoExtra(precoExtra)).build();
     }
 
     @POST
-    @RolesAllowed({"ADMIN"})
-    @Transactional
+    /* @RolesAllowed({"ADMIN"}) */
+    /* @Transactional */
     public Response insert(EdicaoEspecialDTO dto){
         LOG.info("Inserindo uma nova edição especial.");
         return Response.status(Status.CREATED).entity(service.insert(dto)).build();
@@ -78,8 +78,8 @@ public class EdicaoEspecialResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
-    @Transactional
+    /* @RolesAllowed({"ADMIN"}) */
+    /* @Transactional */
     public Response update(@PathParam("id") Long id, EdicaoEspecialDTO dto){
         LOG.infof("Atualizando a edição especial do id %s", id);
         return Response.ok(service.update(id, dto)).build();
@@ -87,8 +87,8 @@ public class EdicaoEspecialResource {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
-    @Transactional
+   /*  @RolesAllowed({"ADMIN"}) */
+    /* @Transactional */
     public Response delete(@PathParam("id") Long id){
         LOG.infof("Deletando a edição especial do id %s", id);
         service.delete(id);

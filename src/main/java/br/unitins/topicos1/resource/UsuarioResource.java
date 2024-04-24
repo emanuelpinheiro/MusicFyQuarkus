@@ -31,7 +31,7 @@ public class UsuarioResource {
     UsuarioService service;
 
     @POST
-    @RolesAllowed({ "ADMIN", "USER" })
+    /* @RolesAllowed({ "ADMIN", "USER" }) */
     public Response insert(UsuarioDTO dto) {
         Result result = null;
 
@@ -58,7 +58,7 @@ public class UsuarioResource {
     @PUT
     @Transactional
     @Path("/{id}")
-    @RolesAllowed({ "ADMIN", "USER" })
+    /* @RolesAllowed({ "ADMIN", "USER" }) */
     public Response update(UsuarioDTO dto, @PathParam("id") Long id) {
         try{
         LOG.infof("Atualizando o usuario: %s", dto.nome());
@@ -85,23 +85,23 @@ public class UsuarioResource {
     }
 
     @DELETE
-    @Transactional
+    /* @Transactional */
     @Path("/{id}")
-    @RolesAllowed({ "ADMIN"})
+    /* @RolesAllowed({ "ADMIN"}) */
     public Response delete(@PathParam("id") Long id) {
         service.delete(id);
         return Response.noContent().build();
     }
 
     @GET
-    @RolesAllowed({ "ADMIN", "USER" })
+    /* @RolesAllowed({ "ADMIN", "USER" }) */
     public Response findAll() {
         return Response.ok(service.findByAll()).build();
     }
 
 
     @GET
-    @RolesAllowed({ "ADMIN" })
+    /* @RolesAllowed({ "ADMIN" }) */
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(service.findById(id)).build();
@@ -110,7 +110,7 @@ public class UsuarioResource {
     
 
     @GET
-    @RolesAllowed({ "ADMIN" })
+    /* @RolesAllowed({ "ADMIN" }) */
     @Path("/search/login/{login}")
     public Response findByLogin(@PathParam("login") String login){
         return Response.ok(service.findByLogin(login)).build();

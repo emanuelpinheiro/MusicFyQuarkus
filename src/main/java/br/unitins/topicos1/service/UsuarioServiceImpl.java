@@ -65,9 +65,13 @@ public class UsuarioServiceImpl implements UsuarioService {
                 telefone.setNumero(tel.numero());
                 novoUsuario.getListaTelefone().add(telefone);
             }
+      
         } else
             throw new ValidationException("listaTelefone", "O usuário deve ter pelo menos um telefone.");
             
+
+
+
 
         return UsuarioResponseDTO.valueOf(novoUsuario);
         }

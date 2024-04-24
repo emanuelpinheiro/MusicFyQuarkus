@@ -67,7 +67,7 @@ public class AlbumResource {
     }
 
     @PUT
-    @Transactional
+    /* @Transactional */
     @Path("/{id}")   
     public Response update(AlbumDTO dto, @PathParam("id") Long id){
         try{

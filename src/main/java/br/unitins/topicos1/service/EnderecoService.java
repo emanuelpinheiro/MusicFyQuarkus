@@ -8,11 +8,11 @@ import jakarta.validation.Valid;
 
 public interface EnderecoService {
   
-    public EnderecoResponseDTO insert(@Valid EnderecoDTO dto, String login);
+    public EnderecoResponseDTO insert(@Valid EnderecoDTO dto, Long idUsuario);
 
     public EnderecoResponseDTO update(Long idUsuario, Long idEndereco, @Valid EnderecoDTO dto);
 
-    public void delete(Long idUsuario, Long idEndereco);
+    public void delete(Long id);
 
     public EnderecoResponseDTO findById(Long id);
 

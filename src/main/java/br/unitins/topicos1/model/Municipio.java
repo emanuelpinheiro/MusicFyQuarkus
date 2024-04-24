@@ -15,6 +15,13 @@ public class Municipio extends DefaultEntity {
     @JoinColumn(name = "id_estado", nullable = false)
     private Estado estado;
 
+    public Municipio() {
+    }
+
+    public Municipio(Long idMunicipio){
+        this.setId(idMunicipio);
+    }
+
     public String getNome() {
         return nome;
     }
@@ -30,5 +37,7 @@ public class Municipio extends DefaultEntity {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
+
+
 
 }

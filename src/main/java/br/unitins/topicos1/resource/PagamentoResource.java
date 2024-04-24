@@ -29,7 +29,7 @@ public class PagamentoResource {
 
     @PATCH
     @Path("/realizar-pagamento/{id}")
-    @RolesAllowed({ "USER", "ADMIN" })
+   /*  @RolesAllowed({ "USER", "ADMIN" }) */
     public Response realizarPagamento(@PathParam ("id") Long id) {
         LOG.info("Iniciando busca de Pedidos");
 

@@ -38,7 +38,7 @@ public class PedidoResource {
 
     @POST
     @Path("/iniciar-pedido")
-    @RolesAllowed({ "USER", "ADMIN" })
+   /*  @RolesAllowed({ "USER", "ADMIN" }) */
     public Response insert(@Valid PedidoDTO dto){
         LOG.infof("Inserindo um novo pedido: %s");
         try {
@@ -63,7 +63,7 @@ public class PedidoResource {
 
     @GET
     @Path("buscar/pedido/{id}")
-    @RolesAllowed({"ADMIN" })
+    /* @RolesAllowed({"ADMIN" }) */
     public Response findById(@PathParam("id") Long id) {
         LOG.infof("Iniciando busca do Pedido : %s", id);
         PedidoResponseDTO pedido = service.findById(id);
