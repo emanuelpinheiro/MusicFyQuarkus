@@ -6,7 +6,12 @@ import java.util.stream.Collectors;
 
 import br.unitins.topicos1.dto.FaixaDTO;
 import br.unitins.topicos1.dto.FaixaResponseDTO;
+import br.unitins.topicos1.model.ClassificacaoEtaria;
+import br.unitins.topicos1.model.Compositor;
 import br.unitins.topicos1.model.Faixa;
+import br.unitins.topicos1.repository.ArtistaRepository;
+import br.unitins.topicos1.repository.ClassificacaoEtariaRepository;
+import br.unitins.topicos1.repository.CompositorRepository;
 import br.unitins.topicos1.repository.FaixaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -26,6 +31,15 @@ public class FaixaServiceImpl implements FaixaService{
     @Inject
     Validator validator;
 
+    @Inject
+    ArtistaRepository artistaRepository;
+
+    @Inject
+    CompositorRepository compositorRepository;
+
+    @Inject
+    ClassificacaoEtariaRepository classificacaoEtariaRepository;
+
     private void validar(FaixaDTO faixaDTO) throws ConstraintViolationException {
         Set<ConstraintViolation<FaixaDTO>> violations = validator.validate(faixaDTO);
 
@@ -35,10 +49,15 @@ public class FaixaServiceImpl implements FaixaService{
 
     @Override
     @Transactional
-    public FaixaResponseDTO insert(@Valid FaixaDTO dto) {
-        validar(dto);
+    public FaixaResponseDTO insert(@Valid FaixaDTO faixaDto) {
+        validar(faixaDto);
         Faixa novoFaixa = new Faixa();
-        novoFaixa.setNome(dto.nome());
+        novoFaixa.setTitulo(faixaDto.titulo());
+        novoFaixa.setArtista(artistaRepository.findById(faixaDto.id_artista()));
+        novoFaixa.setCompositor(compositorRepository.findById(faixaDto.id_compositor()));
+        novoFaixa.setClassificacaoEtaria(classificacaoEtariaRepository.findById(faixaDto.id_classificacao_etaria()));
+        novoFaixa.setDuracao(faixaDto.duracao());
+        novoFaixa.setNumero(faixaDto.numero());
 
 
         repository.persist(novoFaixa);
@@ -48,15 +67,20 @@ public class FaixaServiceImpl implements FaixaService{
 
     @Override
     @Transactional
-    public FaixaResponseDTO update(FaixaDTO dto, Long id) {
+    public FaixaResponseDTO update(FaixaDTO faixaDto, Long id) {
 
-        Faixa faixa = repository.findById(id);
-        if (faixa != null){
-            faixa.setNome(dto.nome());
+        Faixa novoFaixa = repository.findById(id);
+        if (novoFaixa != null){
+            novoFaixa.setTitulo(faixaDto.titulo());
+            novoFaixa.setArtista(artistaRepository.findById(faixaDto.id_artista()));
+            novoFaixa.setCompositor(compositorRepository.findById(faixaDto.id_compositor()));
+            novoFaixa.setClassificacaoEtaria(classificacaoEtariaRepository.findById(faixaDto.id_classificacao_etaria()));
+            novoFaixa.setDuracao(faixaDto.duracao());
+            novoFaixa.setNumero(faixaDto.numero());
         } else
             throw new NotFoundException();
 
-        return FaixaResponseDTO.valueOf(faixa);
+        return FaixaResponseDTO.valueOf(novoFaixa);
     }
 
 

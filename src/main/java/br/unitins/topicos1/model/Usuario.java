@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Size;
 public class Usuario extends DefaultEntity {
 
     private String login;
+    
     private String nome;
 
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
@@ -32,9 +33,9 @@ public class Usuario extends DefaultEntity {
     @JoinTable(name="usuario_telefone",
         joinColumns= @JoinColumn(name="id_usuario"),
         inverseJoinColumns = @JoinColumn(name="id_telefone") )
-    private List<Telefone> listaTelefone = new ArrayList<Telefone>();
+    private List<Telefone> listaTelefone;
 
-    @OneToMany(cascade =  CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true )
     @JoinTable(name = "usuario_endereco", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_endereco"))
     private List<Endereco> listaEndereco;
 
@@ -63,6 +64,9 @@ public class Usuario extends DefaultEntity {
     }
     
     public List<Telefone> getListaTelefone() {
+
+        if(this.listaTelefone == null)
+            this.listaTelefone = new ArrayList<Telefone>();
         return listaTelefone;
     }
 
@@ -95,6 +99,9 @@ public class Usuario extends DefaultEntity {
     }
 
     public List<Endereco> getListaEndereco() {
+        if (this.listaEndereco == null) {
+            this.listaEndereco = new ArrayList<Endereco>();
+        }
         return listaEndereco;
     }
 

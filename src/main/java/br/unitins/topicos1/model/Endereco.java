@@ -29,10 +29,6 @@ public class Endereco extends DefaultEntity {
     @JoinColumn(name = "id_municipio", nullable = false)
     private Municipio municipio;
 
-    @ManyToOne
-
-    private Usuario usuario;
-
 
     public Endereco() {
     }
@@ -102,4 +98,8 @@ public class Endereco extends DefaultEntity {
     public void setMunicipio(Municipio municipio) {
         this.municipio = municipio;
     }
+
+   
+
+    
 }

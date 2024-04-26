@@ -53,30 +53,25 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNome(dto.nome());
         novoUsuario.setLogin(dto.login());
+        novoUsuario.setCpf(dto.cpf());
         novoUsuario.setSenha(hashService.getHashSenha(dto.senha()));
         novoUsuario.setPerfil(dto.perfil());
 
-        if (dto.listaTelefone() != null &&
-                !dto.listaTelefone().isEmpty()) {
-            novoUsuario.setListaTelefone(new ArrayList<Telefone>());
-            for (TelefoneDTO tel : dto.listaTelefone()) {
-                Telefone telefone = new Telefone();
-                telefone.setCodigoArea(tel.codigoArea());
-                telefone.setNumero(tel.numero());
-                novoUsuario.getListaTelefone().add(telefone);
-            }
-      
-        } else
-            throw new ValidationException("listaTelefone", "O usuário deve ter pelo menos um telefone.");
-            
-
-
-
-
+    
         return UsuarioResponseDTO.valueOf(novoUsuario);
         }
         
-    
+    @Override
+    @Transactional
+    public UsuarioResponseDTO insertTelefone(Long idUsuario , @Valid TelefoneDTO dto){
+        Usuario usuario = usuarioRepository.findById(idUsuario);
+        Telefone telefone = new Telefone(); 
+        telefone.setCodigoArea(dto.codigoArea());
+        telefone.setNumero(dto.numero());
+        usuario.getListaTelefone().add(telefone);
+
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
 
     @Override
     @Transactional
@@ -94,17 +89,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setLogin(dto.login());
         usuario.setSenha(dto.senha());
         usuario.setPerfil(dto.perfil());
-        
-        if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
-            usuario.getListaTelefone().clear();
-            for (TelefoneDTO tel : dto.listaTelefone()) {
-                Telefone telefone = new Telefone();
-                telefone.setCodigoArea(tel.codigoArea());
-                telefone.setNumero(tel.numero());
-                usuario.getListaTelefone().add(telefone);
-            }
-        } else
-            throw new ValidationException("listaTelefone", "O usuário deve ter pelo menos um telefone.");
         
         
         return UsuarioResponseDTO.valueOf(usuario);

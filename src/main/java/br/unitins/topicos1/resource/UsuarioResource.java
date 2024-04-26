@@ -1,6 +1,7 @@
 package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.application.Result;
+import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.UsuarioDTO;
 import br.unitins.topicos1.service.UsuarioService;
 import jakarta.annotation.security.RolesAllowed;
@@ -33,27 +34,9 @@ public class UsuarioResource {
     @POST
     /* @RolesAllowed({ "ADMIN", "USER" }) */
     public Response insert(UsuarioDTO dto) {
-        Result result = null;
-
-        try{
-            LOG.infof("Usuario Criado com sucesso: %s", dto.nome());
-
+      
             return Response.status(Status.CREATED).entity(service.insert(dto)).build();
         } 
-        catch (ConstraintViolationException e) {
-            
-            LOG.infof("Erro ao inserir o usuario.");
-            LOG.debug(e.getMessage());
-            result = new Result(e.getConstraintViolations());
-        } 
-        catch (Exception e) {
-            LOG.fatal("Erro sem identificacao: " + e.getMessage());
-        }
-        return Response
-        .status(Status.NOT_FOUND)
-        .entity(result)
-        .build();   
-    }
 
     @PUT
     @Transactional
@@ -82,6 +65,12 @@ public class UsuarioResource {
             .entity(result)
             .build();
         }
+    }
+
+    @POST
+    @Path("usuario/inserir-telefone/{id}")
+    public Response insertTelefone(TelefoneDTO dto, @PathParam("id") Long id) {
+        return Response.status(Status.CREATED).entity(service.insertTelefone(id, dto)).build();
     }
 
     @DELETE

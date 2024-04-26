@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 
 
 public record UsuarioDTO (
+
     @NotBlank(message = "O nome deve ser informado")
     String nome,
     @NotBlank(message = "O login deve ser informado")
@@ -16,16 +17,12 @@ public record UsuarioDTO (
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
     String senha,
     
-    @NotNull(message = "O endereço deve ser informado")
-    List<EnderecoDTO> endereco,
-   
-   @NotBlank(message = "O CPF deve ser informado")
+    @NotBlank(message = "O CPF deve ser informado")
     String cpf,
     
     @NotNull(message = "O Perfil deve ser informado")
-    Perfil perfil,
+    Perfil perfil
     
-    List<TelefoneDTO> listaTelefone
 
 ){
 

@@ -5,9 +5,7 @@ import org.jboss.logging.Logger;
 
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.service.EnderecoService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -58,12 +56,14 @@ public class EnderecoResource {
     }
 
     @POST
-    @Path("/insere-endereco")
+    @Path("/insere-endereco/{id}")
    /*  @RolesAllowed({"USER","ADMIN"}) */
-    public Response insert(EnderecoDTO dto){
+    public Response insert(EnderecoDTO dto, @PathParam("id") long id){
         LOG.info("Inserindo endereço.");
-        String login = jwt.getSubject();
-        return Response.status(Status.CREATED).entity(service.insert(dto.idUsuario)).build();
+       // String login = jwt.getSubject();
+        return Response.status(Status.CREATED).entity(service.insert(dto,id)).build();
+        
+
     }
 
     @PUT
@@ -79,12 +79,11 @@ public class EnderecoResource {
     }
 
     @DELETE
-    /* @Transactional */
     @Path("/deleta-endereco/{id}/{idEndereco}")
     /* @RolesAllowed({"ADMIN"}) */
-    public Response delete(@PathParam("id") Long id, @PathParam("idEndereco") Long idEndereco){
+    public Response delete(@PathParam("idUsuario") Long id, @PathParam("idEndereco") Long idEndereco){
         LOG.infof("Deletando endereço %s", idEndereco);
-        service.delete(id, idEndereco);
+        service.delete(id,idEndereco);
 
         LOG.info("Endereço deletado.");
         return Response.noContent().build();

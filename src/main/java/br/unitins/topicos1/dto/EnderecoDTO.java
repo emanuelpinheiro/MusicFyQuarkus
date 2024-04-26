@@ -24,6 +24,7 @@ public record EnderecoDTO(
     @NotNull(message = "O campo precisa ser preenchido.")
     
     Long idMunicipio
+
     
 ) {
 

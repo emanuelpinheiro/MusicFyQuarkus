@@ -40,7 +40,7 @@ public class FaixaResource {
     @POST
     //@Transactional
     public Response insert(@Valid FaixaDTO dto){
-        LOG.infof("Inserindo uma nova faixa: %s", dto.nome());
+        LOG.infof("Inserindo uma nova faixa: %s", dto.titulo());
         Result result = null;
         try {
             LOG.infof("Inserido a nova faixa");
@@ -64,7 +64,7 @@ public class FaixaResource {
         Result result = null;
         try{
             service.update(dto, id);
-            LOG.infof("Atualizando a faixa: %s", dto.nome());
+            LOG.infof("Atualizando a faixa: %s", dto.titulo());
             return Response.status(Status.OK).build();
         } catch (ConstraintViolationException e) {
             LOG.infof("Erro ao atualizar a faixa.");

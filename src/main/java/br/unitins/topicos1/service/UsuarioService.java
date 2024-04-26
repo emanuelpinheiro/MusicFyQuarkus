@@ -3,6 +3,7 @@ package br.unitins.topicos1.service;
 import java.util.List;
 import br.unitins.topicos1.dto.UsuarioDTO;
 import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.UpdateSenhaDTO;
 import br.unitins.topicos1.model.Usuario;
 import jakarta.validation.ConstraintViolationException;
@@ -11,6 +12,8 @@ import jakarta.validation.Valid;
 public interface UsuarioService {
 
     public UsuarioResponseDTO insert(@Valid UsuarioDTO dto) throws ConstraintViolationException;
+
+    public UsuarioResponseDTO insertTelefone(Long idUsuario , @Valid TelefoneDTO dto);
 
     public UsuarioResponseDTO update(UsuarioDTO dto, Long id);
 

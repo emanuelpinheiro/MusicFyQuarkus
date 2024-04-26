@@ -14,6 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.NotFoundException;
 
 
 @ApplicationScoped
@@ -48,7 +49,7 @@ public class EnderecoServiceImpl implements EnderecoService {
         endereco.setMunicipio(municipio);
 
         usuario.getListaEndereco().add(endereco);
-
+      
         repositoryEnd.persist(endereco);
 
         return EnderecoResponseDTO.valueOf(endereco);
@@ -87,8 +88,20 @@ public class EnderecoServiceImpl implements EnderecoService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        repositoryEnd.deleteById(id);
+    public void delete(Long idUsuario,Long idEndereco) {
+      Usuario usuario = repositoryUser.findById(idUsuario);
+        Endereco endereco = new Endereco();
+
+        for (Endereco end : usuario.getListaEndereco()){
+            if(end.getId().equals(idEndereco)){
+                endereco = end;
+            }
+        }
+
+        usuario.getListaEndereco().remove(endereco);
+
+        if(!repositoryEnd.deleteById(idEndereco))
+            throw new NotFoundException();
     }
 
     
