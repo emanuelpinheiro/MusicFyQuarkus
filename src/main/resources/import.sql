@@ -44,12 +44,12 @@ INSERT INTO endereco (logradouro, bairro, numero, complemento, cep, id_municipio
 insert into endereco (logradouro, bairro, numero, complemento, cep, id_municipio) values ('Rua C', 'Bairro Z', '789', 'Apto 101', '12345-678', 2);
 
 
-insert into usuario (nome, login, senha, cpf, perfil) values ('luis', 'luiss', 'UTD+AWUM7xWFkmQV+0A76Z1At65WUe0yNG+HC/zdRauqPtv5XBnBJywgdfg+vb2oRK5ddlpXjLPFJu8M2zf3Bw==', '609.688.453-99', 2);
-insert into usuario (nome, login, senha, cpf, perfil) values ('emily', 'emilyy', 'UTD+AWUM7xWFkmQV+0A76Z1At65WUe0yNG+HC/zdRauqPtv5XBnBJywgdfg+vb2oRK5ddlpXjLPFJu8M2zf3Bw==', '071.548.466-56', 1);
-insert into usuario (nome, login, senha, cpf, perfil) values ('eduardo', 'eduardoo', 'UTD+AWUM7xWFkmQV+0A76Z1At65WUe0yNG+HC/zdRauqPtv5XBnBJywgdfg+vb2oRK5ddlpXjLPFJu8M2zf3Bw==', '999.999.999-99', 2);
-insert into usuario (nome, login, senha, cpf, perfil) values ('nome3', 'login3', 'UTD+AWUM7xWFkmQV+0A76Z1At65WUe0yNG+HC/zdRauqPtv5XBnBJywgdfg+vb2oRK5ddlpXjLPFJu8M2zf3Bw==', '999.999.999-99', 1);
-insert into usuario (nome, login, senha, cpf, perfil) values ('nome4', 'login4', 'UTD+AWUM7xWFkmQV+0A76Z1At65WUe0yNG+HC/zdRauqPtv5XBnBJywgdfg+vb2oRK5ddlpXjLPFJu8M2zf3Bw==', '999.999.999-99', 2);
-insert into usuario (nome, login, senha, cpf, perfil) values ('nome5', 'login5', 'UTD+AWUM7xWFkmQV+0A76Z1At65WUe0yNG+HC/zdRauqPtv5XBnBJywgdfg+vb2oRK5ddlpXjLPFJu8M2zf3Bw==', '999.999.999-99', 2);
+insert into usuario (nome, login, senha, cpf, perfil) values ('luis', 'luiss', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '609.688.453-99', 2);
+insert into usuario (nome, login, senha, cpf, perfil) values ('emily', 'emilyy', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '071.548.466-56', 1);
+insert into usuario (nome, login, senha, cpf, perfil) values ('eduardo', 'eduardoo', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '999.999.999-99', 2);
+insert into usuario (nome, login, senha, cpf, perfil) values ('nome3', 'login3', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '999.999.999-99', 1);
+insert into usuario (nome, login, senha, cpf, perfil) values ('nome4', 'login4', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '999.999.999-99', 2);
+insert into usuario (nome, login, senha, cpf, perfil) values ('nome5', 'login5', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '999.999.999-99', 2);
 
 insert into usuario_telefone (id_usuario, id_telefone) values (1, 1);
 insert into usuario_telefone (id_usuario, id_telefone) values (1, 2);
