@@ -2,148 +2,267 @@ package br.unitins.topicos1.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import br.unitins.topicos1.dto.TelefoneDTO;
-import br.unitins.topicos1.dto.UpdateSenhaDTO;
+import br.unitins.topicos1.dto.AtualizarEmailDTO;
+import br.unitins.topicos1.dto.AtualizarNomeDTO;
+import br.unitins.topicos1.dto.AtualizarSenhaDTO;
+import br.unitins.topicos1.dto.AtualizarTelefoneDTO;
+import br.unitins.topicos1.dto.CadastroUsuarioDTO;
+import br.unitins.topicos1.dto.CadastroUsuarioResponseDTO;
 import br.unitins.topicos1.dto.UsuarioDTO;
 import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.model.Perfil;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.Usuario;
-import br.unitins.topicos1.repository.MunicipioRepository;
 import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 
 @ApplicationScoped
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Inject
-    UsuarioRepository usuarioRepository;
-
-    @Inject
-    MunicipioRepository municipioRepository;
-
-    @Inject
-    Validator validator;
+    UsuarioRepository repository;
 
     @Inject
     HashService hashService;
 
-    private void validar(UsuarioDTO usuarioDTO) throws ConstraintViolationException {
-        Set<ConstraintViolation<UsuarioDTO>> violations = validator.validate(usuarioDTO);
-
-        if (!violations.isEmpty())
-            throw new ConstraintViolationException(violations);
-    }
+    @Inject
+    JwtService jwtService;
 
     @Override
     @Transactional
-    public UsuarioResponseDTO insert(@Valid UsuarioDTO dto) throws ConstraintViolationException{
-        validar(dto);
-        if (usuarioRepository.findByLogin(dto.login()) != null) {
+    public UsuarioResponseDTO insert(@Valid UsuarioDTO dto) {
+
+        if (repository.findByLogin(dto.login()) != null) {
             throw new ValidationException("login", "Login já existe.");
         }
+
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNome(dto.nome());
         novoUsuario.setLogin(dto.login());
         novoUsuario.setCpf(dto.cpf());
+        novoUsuario.setEmail(dto.email());
         novoUsuario.setSenha(hashService.getHashSenha(dto.senha()));
-        novoUsuario.setPerfil(dto.perfil());
 
-    
+        novoUsuario.setPerfil(Perfil.valueOf(1));
+
+        if (dto.listaTelefone() != null &&
+                !dto.listaTelefone().isEmpty()) {
+            novoUsuario.setListaTelefone(new ArrayList<Telefone>());
+            for (TelefoneDTO tel : dto.listaTelefone()) {
+                Telefone telefone = new Telefone();
+                telefone.setCodigoArea(tel.codigoArea());
+                telefone.setNumero(tel.numero());
+                novoUsuario.getListaTelefone().add(telefone);
+            }
+        }
+
+        repository.persist(novoUsuario);
+
         return UsuarioResponseDTO.valueOf(novoUsuario);
+    }
+
+    @Override
+    @Transactional
+    public CadastroUsuarioResponseDTO cadastrarUsuario(@Valid CadastroUsuarioDTO dto) {
+
+        if (repository.findByLogin(dto.login()) != null) {
+            throw new ValidationException("login", "Login já existe.");
         }
-        
-    @Override
-    @Transactional
-    public UsuarioResponseDTO insertTelefone(Long idUsuario , @Valid TelefoneDTO dto){
-        Usuario usuario = usuarioRepository.findById(idUsuario);
-        Telefone telefone = new Telefone(); 
-        telefone.setCodigoArea(dto.codigoArea());
-        telefone.setNumero(dto.numero());
-        usuario.getListaTelefone().add(telefone);
 
-        return UsuarioResponseDTO.valueOf(usuario);
+        Usuario novoUsuario = new Usuario();
+        novoUsuario.setNome(dto.nome());
+        novoUsuario.setLogin(dto.login());
+        novoUsuario.setCpf(dto.cpf());
+        novoUsuario.setEmail(dto.email());
+        novoUsuario.setSenha(hashService.getHashSenha(dto.senha()));
+
+        novoUsuario.setPerfil(Perfil.valueOf(dto.idPerfil()));
+
+        if (dto.listaTelefone() != null &&
+                !dto.listaTelefone().isEmpty()) {
+            novoUsuario.setListaTelefone(new ArrayList<Telefone>());
+            for (TelefoneDTO tel : dto.listaTelefone()) {
+                Telefone telefone = new Telefone();
+                telefone.setCodigoArea(tel.codigoArea());
+                telefone.setNumero(tel.numero());
+                novoUsuario.getListaTelefone().add(telefone);
+            }
+        }
+
+        repository.persist(novoUsuario);
+
+        return CadastroUsuarioResponseDTO.valueOf(novoUsuario);
     }
 
+    // Atualizar usuário com jwt
     @Override
     @Transactional
-    public UsuarioResponseDTO updateNomeImagem(Long id, String nomeImagem) {
-        Usuario usuario = usuarioRepository.findById(id);
-        usuario.setNomeImagem(nomeImagem);
-        return UsuarioResponseDTO.valueOf(usuario);
-    }
-
-    @Override
-    @Transactional
-    public UsuarioResponseDTO update(UsuarioDTO dto, Long id) {
-        Usuario usuario = usuarioRepository.findById(id);
-        usuario.setNome(dto.nome());
+    public UsuarioResponseDTO update(@Valid UsuarioDTO dto, Long id) {
+        Usuario usuario = repository.findById(id);
         usuario.setLogin(dto.login());
+        usuario.setNome(dto.nome());
+        usuario.setCpf(dto.cpf());
         usuario.setSenha(dto.senha());
-        usuario.setPerfil(dto.perfil());
-        
-        
-        return UsuarioResponseDTO.valueOf(usuario);
+
+        List<Telefone> telefones = new ArrayList<Telefone>();
+
+        if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
+            usuario.setListaTelefone(new ArrayList<Telefone>());
+            for (TelefoneDTO tel : dto.listaTelefone()) {
+                Telefone telefone = new Telefone();
+
+                telefone.setCodigoArea(tel.codigoArea());
+                telefone.setNumero(tel.numero());
+
+                telefones.add(telefone);
+            }
         }
+
+        usuario.setListaTelefone(telefones);
+
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponseDTO updateSenha(@Valid AtualizarSenhaDTO dto, String login) {
+
+        Usuario usuario = repository.findByLogin(login);
+
+        if (usuario.getSenha().equals(hashService.getHashSenha(dto.senhaAtual()))) {
+            usuario.setSenha(hashService.getHashSenha(dto.novaSenha()));
+
+        } else
+            throw new ValidationException("Senha", "Senha atual incorreta.");
+
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponseDTO updateNome(@Valid AtualizarNomeDTO dto, String login) {
+
+        Usuario usuario = repository.findByLogin(login);
+
+        if (usuario.getSenha().equals(hashService.getHashSenha(dto.senhaAtual()))) {
+            usuario.setNome(dto.nome());
+
+        } else
+            throw new ValidationException("Senha", "Senha atual incorreta. ");
+
+        return UsuarioResponseDTO.valueOf(usuario);
+
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponseDTO updateEmail(@Valid AtualizarEmailDTO dto, String login) {
+
+        Usuario usuario = repository.findByLogin(login);
+
+        // Pedindo a senha do usuario como medida de proteção
+        if (usuario.getSenha().equals(hashService.getHashSenha(dto.senhaAtual()))) {
+            usuario.setEmail(dto.email());
+
+        } else
+            throw new ValidationException("Senha", "Senha atual incorreta. ");
+
+        return UsuarioResponseDTO.valueOf(usuario);
+
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponseDTO updateTelefone(@Valid AtualizarTelefoneDTO dto, String login) {
+
+        Usuario usuario = repository.findByLogin(login);
+
+        usuario.getListaTelefone().clear();
+
+        List<Telefone> telefones = usuario.getListaTelefone();
+
+        if (usuario.getSenha().equals(hashService.getHashSenha(dto.senhaAtual()))) {
+            usuario.setListaTelefone(new ArrayList<Telefone>());
+            for (TelefoneDTO tel : dto.listaTelefones()) {
+                Telefone telefone = new Telefone();
+
+                telefone.setCodigoArea(tel.codigoArea());
+                telefone.setNumero(tel.numero());
+
+                telefones.add(telefone);
+
+                usuario.setListaTelefone(telefones);
+
+            }
+
+        } else
+            throw new ValidationException("Senha", "Senha atual incorreta. ");
+
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (id == null || id <= 0)
-            throw new ValidationException("id", "Id inválido!");
-        Usuario usuario = usuarioRepository.findById(id);
-        usuarioRepository.delete(usuario);
+        Usuario usuario = repository.findById(id);
+
+        repository.delete(usuario);
     }
 
     @Override
     public UsuarioResponseDTO findById(Long id) {
-        return UsuarioResponseDTO.valueOf(usuarioRepository.findById(id));
+        return UsuarioResponseDTO.valueOf(repository.findById(id));
+    }
+
+    @Override
+    public List<UsuarioResponseDTO> findByNome(String nome) {
+        return repository.findByNome(nome)
+                .stream()
+                .map(e -> UsuarioResponseDTO.valueOf(e))
+                .toList();
+    }
+
+    @Override
+    public List<UsuarioResponseDTO> findByAll() {
+        return repository.listAll().stream()
+                .map(e -> UsuarioResponseDTO.valueOf(e)).toList();
     }
 
     @Override
     public UsuarioResponseDTO findByLoginAndSenha(String login, String senha) {
-        Usuario usuario = usuarioRepository.findByLoginAndSenha(login, senha);
-        if (usuario == null) 
-            throw new ValidationException("login", "Login ou senha incorretos!");
-        
+        Usuario usuario = repository.findByLoginAndSenha(login, senha);
+        if (usuario == null)
+            throw new ValidationException("login", "Login ou senha inválido");
+
         return UsuarioResponseDTO.valueOf(usuario);
     }
 
-
-    @Override
-    public List<UsuarioResponseDTO> findByAll() {
-        return usuarioRepository.listAll().stream()
-        .map(e -> UsuarioResponseDTO.valueOf(e)).collect(Collectors.toList());
-    }
     
     @Override
-    public Usuario findByLogin(String login) {
-        Usuario usuario = usuarioRepository.findByLogin(login);
-        if (usuario == null) {
-            throw new ValidationException("login", "Login não existe!");
-        }
-        return usuario;
+    public CadastroUsuarioResponseDTO findByLoginAndSenhaPerfil(String login, String senha) {
+        Usuario usuario = repository.findByLoginAndSenha(login, senha);
+        if (usuario == null)
+            throw new ValidationException("login", "Login ou senha inválido");
+
+        return CadastroUsuarioResponseDTO.valueOf(usuario);
     }
 
     @Override
-    @Transactional
-      public void updateSenha(UpdateSenhaDTO dto, Long id) {
-       
-        Usuario usuario = usuarioRepository.findById(id);
+    public UsuarioResponseDTO findByLogin(String login) {
+        Usuario usuario = repository.findByLogin(login);
+        if (usuario == null)
+            throw new ValidationException("login", "Login inválido");
 
-      
-        if (usuario.getSenha().equals(hashService.getHashSenha(dto.senha())))
-            usuario.setSenha(hashService.getHashSenha(dto.NovaSenha())); 
-        else
-            throw new ValidationException("senha", "Senha incorreta!");
-      }
-       
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
+
+    @Override
+    public long count() {
+        return repository.count();
+    }
 }

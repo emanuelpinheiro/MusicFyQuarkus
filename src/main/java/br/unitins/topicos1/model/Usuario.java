@@ -14,38 +14,26 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class Usuario extends DefaultEntity {
 
-    private String login;
-    
     private String nome;
-
-    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
+    private String login;
+    private String email;
     private String senha;
-
-    private String nomeImagem;
-
-    @NotBlank(message = "CPF é obrigatório")
+    private Perfil perfil;
     private String cpf;
-	
-   @Column(name = "perfil")
-   private Perfil perfil;
-    
-    @OneToMany(cascade =  CascadeType.ALL, orphanRemoval = true )
-    @JoinTable(name="usuario_telefone",
-        joinColumns= @JoinColumn(name="id_usuario"),
-        inverseJoinColumns = @JoinColumn(name="id_telefone") )
+
+    private String nomeImage;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "meus_cds", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_cd"))
+    private List<CD> meusCds;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "usuario_telefone", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_telefone"))
     private List<Telefone> listaTelefone;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "usuario_endereco", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_endereco"))
     private List<Endereco> listaEndereco;
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
 
     public String getNome() {
         return nome;
@@ -55,6 +43,22 @@ public class Usuario extends DefaultEntity {
         this.nome = nome;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getSenha() {
         return senha;
     }
@@ -62,11 +66,8 @@ public class Usuario extends DefaultEntity {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
-    public List<Telefone> getListaTelefone() {
 
-        if(this.listaTelefone == null)
-            this.listaTelefone = new ArrayList<Telefone>();
+    public List<Telefone> getListaTelefone() {
         return listaTelefone;
     }
 
@@ -74,38 +75,46 @@ public class Usuario extends DefaultEntity {
         this.listaTelefone = listaTelefone;
     }
 
-    public Perfil getPerfil(){
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil){
-        this.perfil = perfil;
-    }
-
-    public String getNomeImagem() {
-        return nomeImagem;
-    }
-
-    public void setNomeImagem(String nomeImagem){
-        this.nomeImagem = nomeImagem;
-    }
-    
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf){
-        this.cpf = cpf;
-    }
-
     public List<Endereco> getListaEndereco() {
-        if (this.listaEndereco == null) {
-            this.listaEndereco = new ArrayList<Endereco>();
-        }
         return listaEndereco;
     }
 
     public void setListaEndereco(List<Endereco> listaEndereco) {
         this.listaEndereco = listaEndereco;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public List<CD> getMeusCds() {
+        return meusCds;
+    }
+
+    public void setMeusCds(List<CD> meusCds) {
+        this.meusCds = meusCds;
+    }
+
+    public String getNomeImage() {
+        return nomeImage;
+    }
+
+    public void setNomeImage(String nomeImage) {
+        this.nomeImage = nomeImage;
+    }
+
+    public void setNomeImagem(String nomeImagem) {
     }
 }

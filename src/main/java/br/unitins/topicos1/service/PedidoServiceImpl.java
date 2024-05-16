@@ -33,7 +33,7 @@ public class PedidoServiceImpl implements PedidoService {
     UsuarioRepository usuarioRepository;
 
     @Inject
-    AlbumRepository AlbumRepository;
+    AlbumRepository albumRepository;
 
     @Inject
     PedidoRepository pedidoRepository;
@@ -51,7 +51,7 @@ public class PedidoServiceImpl implements PedidoService {
             novoPedido.setDataPedido(LocalDateTime.now());
              Endereco endereco = enderecoRepository.findById(dto.endereco());
         if (endereco == null) {
-            throw new NotFoundException("Endereco not found with id: " + dto.endereco());
+            throw new NotFoundException("Endereco não encontrado com o id: " + dto.endereco());
         }
         novoPedido.setEndereco(endereco);
 
@@ -62,7 +62,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         Double total = 0.0;
         for (ItemPedidoDTO itemDto : dto.itens()) {
-            Album album = AlbumRepository.findById(itemDto.idProduto());
+            Album album = albumRepository.findById(itemDto.idProduto());
             total += (album.getPreco() * itemDto.quantidade());
         }
         novoPedido.setTotalPedido(total);
@@ -71,7 +71,7 @@ public class PedidoServiceImpl implements PedidoService {
             ItemPedido item = new ItemPedido();
             item.setQuantidade(itemDto.quantidade());
 
-            Album Album = AlbumRepository.findById(itemDto.idProduto());
+            Album Album = albumRepository.findById(itemDto.idProduto());
             item.setAlbum(Album);
 
 
@@ -99,9 +99,10 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
    
-    public List<PedidoResponseDTO> findByUsuario(Long idUsuario) {
-        List<Pedido> pedidos = pedidoRepository.findAll(idUsuario);
-        return pedidos.stream().map(PedidoResponseDTO::valueOf).collect(Collectors.toList());
+    @Override
+    public List<PedidoResponseDTO> findByAll(String login) {
+        return pedidoRepository.listAll().stream()
+                .map(e -> PedidoResponseDTO.valueOf(e)).toList();
     }
 
 }

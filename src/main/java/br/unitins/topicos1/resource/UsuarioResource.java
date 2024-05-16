@@ -1,13 +1,13 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.application.Result;
-import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.UsuarioDTO;
+import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.service.UsuarioService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -18,7 +18,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
 
 @Path("/usuarios")
@@ -26,82 +25,76 @@ import org.jboss.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UsuarioResource {
 
-    private static final Logger LOG = Logger.getLogger(AlbumResource.class);
-
     @Inject
     UsuarioService service;
 
+    @Inject
+    UsuarioRepository usuarioRepository;
+
+    private static final Logger LOG = Logger.getLogger(UsuarioResource.class);
+
     @POST
-    /* @RolesAllowed({ "ADMIN", "USER" }) */
-    public Response insert(UsuarioDTO dto) {
-      
-            return Response.status(Status.CREATED).entity(service.insert(dto)).build();
-        } 
+    @Path("/cadastro")
+    public Response insert(@Valid UsuarioDTO dto) {
+        LOG.info("Iniciando a inserção de usuario");
+
+        if (usuarioRepository.findByLogin(dto.login()) != null) {
+            LOG.info("Usuario não inserido, login já existente");
+        } else
+            LOG.info("Usuario inserido");
+
+
+        UsuarioResponseDTO retorno = service.insert(dto);
+
+        LOG.infof("Terminando a inserção do usuario", dto.nome());
+        return Response.status(201).entity(retorno).build();
+    }
 
     @PUT
     @Transactional
     @Path("/{id}")
-    /* @RolesAllowed({ "ADMIN", "USER" }) */
-    public Response update(UsuarioDTO dto, @PathParam("id") Long id) {
-        try{
-        LOG.infof("Atualizando o usuario: %s", dto.nome());
+    @RolesAllowed({"Admin" })
+    public Response update(@Valid UsuarioDTO dto, @PathParam("id") Long id) {
+        LOG.infof("Atualizando o dados do Usuario %s", id);
         service.update(dto, id);
-        return Response.noContent().build();
-        }
-        catch (ConstraintViolationException e) {
-            LOG.infof("Erro ao atualizar o usuario.");
-            LOG.debug(e.getMessage());
-            Result result = new Result(e.getConstraintViolations());
-            return Response
-            .status(Status.NOT_FOUND)
-            .entity(result)
-            .build();
-        } 
-        catch (Exception e) {
-            LOG.fatal("Erro sem identificacao: " + e.getMessage());
-            Result result = new Result(e.getMessage(), "404");
-            return Response
-            .status(Status.NOT_FOUND)
-            .entity(result)
-            .build();
-        }
-    }
 
-    @POST
-    @Path("usuario/inserir-telefone/{id}")
-    public Response insertTelefone(TelefoneDTO dto, @PathParam("id") Long id) {
-        return Response.status(Status.CREATED).entity(service.insertTelefone(id, dto)).build();
+        return Response.noContent().build();
     }
 
     @DELETE
-    /* @Transactional */
+    @Transactional
     @Path("/{id}")
-    /* @RolesAllowed({ "ADMIN"}) */
-    public Response delete(@PathParam("id") Long id) {
+    @RolesAllowed({ "Admin" })
+    public Response delete( @PathParam("id") Long id) {
+        LOG.infof("Deletando Usuario %s", id);
         service.delete(id);
+        
         return Response.noContent().build();
     }
 
     @GET
-    /* @RolesAllowed({ "ADMIN", "USER" }) */
+    @RolesAllowed({ "Admin" })
     public Response findAll() {
+
         return Response.ok(service.findByAll()).build();
     }
 
-
     @GET
-    /* @RolesAllowed({ "ADMIN" }) */
     @Path("/{id}")
+    @RolesAllowed({ "Admin" })
     public Response findById(@PathParam("id") Long id) {
+        LOG.infof("Procurando o Usuario %s", id);
+        
+        
         return Response.ok(service.findById(id)).build();
-    }    
-
-    
+    }
 
     @GET
-    /* @RolesAllowed({ "ADMIN" }) */
-    @Path("/search/login/{login}")
-    public Response findByLogin(@PathParam("login") String login){
-        return Response.ok(service.findByLogin(login)).build();
+    @Path("/search/nome/{nome}")
+    @RolesAllowed({ "Admin" })
+    public Response findByNome(@PathParam("nome") String nome) {
+        LOG.infof("Buscando usuario pelo nome: %s", nome);
+       
+        return Response.ok(service.findByNome(nome)).build();
     }
 }

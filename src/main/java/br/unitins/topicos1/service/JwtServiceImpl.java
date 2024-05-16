@@ -14,23 +14,39 @@ public class JwtServiceImpl implements JwtService {
     private static final Duration EXPIRATION_TIME = Duration.ofHours(24);
 
     @Override
-    public String generateJwt(UsuarioResponseDTO usuario) {
+    public String generateJwt(UsuarioResponseDTO dto) {
         Instant now = Instant.now();
         Instant expiryDate = now.plus(EXPIRATION_TIME);
 
-    
-       // Perfil perfil = usuario.perfil();
-
-      //  String roleName = perfil.getLabel();
-
-      Set<String> roleName = new HashSet<String>();
-      roleName.add(usuario.perfil().getLabel());
+        Set<String> roles = new HashSet<String>();
+        roles.add("Usuario");
 
         return Jwt.issuer("unitins-jwt")
-            .subject(usuario.login())  
-            .groups(roleName)
-            .expiresAt(expiryDate)
-            .sign();
+                .subject(dto.login())
+                .groups(roles)
+                .expiresAt(expiryDate)
+                .sign();
+
     }
+
+    // @Override
+    // public String generateJwt(UsuarioResponseDTO dto) {
+    //     Instant now = Instant.now();
+    //     Instant expiryDate = now.plus(EXPIRATION_TIME);
+
+    
+    //    // Perfil perfil = usuario.perfil();
+
+    //   //  String roleName = perfil.getLabel();
+
+    //   Set<String> roleName = new HashSet<String>();
+    //   roleName.add(usuario.perfil().getLabel());
+
+    //     return Jwt.issuer("unitins-jwt")
+    //         .subject(usuario.login())  
+    //         .groups(roleName)
+    //         .expiresAt(expiryDate)
+    //         .sign();
+    // }
     
 }

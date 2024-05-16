@@ -12,7 +12,7 @@ public interface PedidoService {
 
     public PedidoResponseDTO findById(Long id);
 
-    public List<PedidoResponseDTO> findByUsuario(Long idUsuario);
+    public List<PedidoResponseDTO> findByAll(String login);
 
 
 }
