@@ -56,7 +56,7 @@ insert into cidade (nome, id_estado) values ('São Paulo', 25);
 insert into cidade (nome, id_estado) values ('Aracaju', 26);
 insert into cidade (nome, id_estado) values ('Palmas', 27);
 
---inserção de usuários no bd
+--inserção de usuários no bd (senha = 123)
 insert into usuario (nome, login, senha, cpf, perfil) values ('emanuel', 'emanueluser', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '609.688.453-99', 2);
 insert into usuario (nome, login, senha, cpf, perfil) values ('emily', 'emilyuser', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '071.548.466-56', 2);
 insert into usuario (nome, login, senha, cpf, perfil) values ('cliente', 'clienteuser', 'R0ey52dhS6JXwvmpAi12w1SeOjANcDdfovBq1xeSbj8bCJ7fsVUzUyxwEFrT98KAQGDZE3YAmXFf+aPKNHJ39Q==', '999.999.999-99', 1);
@@ -127,6 +127,7 @@ insert into faixa_compositor (id_faixa, id_compositor) values (3, 3);
 insert into edicaoespecial (descricao, preco, estoque, id_album) values ('Edição especial com Poster', 39.90, 100, 2);
 insert into edicaoespecial (descricao, preco, estoque, id_album) values ('Edição especial com Adesivo', 39.90, 100, 3);
 
+--inserção de álbuns no bd
 insert into album ( nome, anoLancamento, descricao, preco, estoque, id_artista, id_genero, id_gravadora, tipoProduto) values ('O Ritmo Que Conquistou o Brasil!', '2002', 'é o segundo álbum de estúdio da banda musical brasileira Banda Calypso, lançado em dezembro de 2002 através de sua gravadora independente Calypso Produções.', 29.90, 100, 3, 1, 4, 'CD');
 insert into album ( nome, anoLancamento, descricao, preco, estoque, id_artista, id_genero, id_gravadora, tipoProduto) values ('Ao Vivo em Palmas/TO', '2005', 'gravado ao vivo na cidade de Palmas (TO), para um público de mais de 70 mil pessoas. O disco vendeu em poucos meses 100 mil cópias.', 39.90, 100, 1, 1, 4, 'CD');
 insert into album ( nome, anoLancamento, descricao, preco, estoque, id_artista, id_genero, id_gravadora, tipoProduto) values ('Kisses', '2019', 'é o quarto álbum de estúdio da artista musical brasileira Anitta, lançado em 5 de abril de 2019 pela Warner Music Brasil. Seguindo a proposta de seu EP Solo (2018), Kisses é um álbum trilíngue, compreendendo as línguas espanhola, inglesa e portuguesa. Além disso, é um projeto visual; isto é, cada canção possui seu próprio vídeo musical. Recebeu uma indicação na 20ª edição do Grammy Latino como Melhor Álbum de Música Urbana.', 29.90, 100, 1, 3, 2, 'CD');

@@ -1,7 +1,9 @@
 package br.unitins.topicos1.model;
 
+import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 
+@Entity
 public class CD extends DefaultEntity {
     
     @NotBlank(message = "O campo nome é obrigatório.")
